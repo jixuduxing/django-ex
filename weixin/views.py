@@ -24,7 +24,7 @@ class Weixin(View):
             return HttpResponse(request.REQUEST.get('echostr', ''))
 
     def post(self,request):
-        return HttpResponse(request.REQUEST.get('echostr', ''))
+        return HttpResponse("Hello world ! ")
 
         # raise PermissionDenied
 
