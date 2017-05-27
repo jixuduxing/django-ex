@@ -15,6 +15,7 @@ class Weixin(View):
         nonce = request.GET.get('nonce', '')
 
         tmp_str = hashlib.sha1(''.join(sorted([self.token, timestamp, nonce]))).hexdigest()
+        assert False
         if tmp_str == signature:
             return True
 
@@ -22,8 +23,8 @@ class Weixin(View):
 
     @csrf_exempt
     def get(self, request):
-        # if self.validate(request):
-        #     return HttpResponse(request.REQUEST.get('echostr', ''))
+        if self.validate(request):
+            return HttpResponse(request.GET.get('echostr', ''))
         return HttpResponse('2')
 
     @csrf_exempt
