@@ -22,8 +22,8 @@ class Weixin(View):
 
     @csrf_exempt
     def get(self, request):
-        if self.validate(request):
-            return HttpResponse(request.REQUEST.get('echostr', ''))
+        # if self.validate(request):
+        #     return HttpResponse(request.REQUEST.get('echostr', ''))
         return HttpResponse('2')
 
     @csrf_exempt
