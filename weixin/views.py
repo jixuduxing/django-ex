@@ -3,6 +3,7 @@ from django.shortcuts import render
 from django.conf import settings
 from django.views.generic.base import View
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 import hashlib
 
 class Weixin(View):
@@ -19,11 +20,13 @@ class Weixin(View):
 
         return False
 
+    @csrf_exempt
     def get(self, request):
         if self.validate(request):
             return HttpResponse(request.REQUEST.get('echostr', ''))
         return HttpResponse('2')
 
+    @csrf_exempt
     def post(self,request):
         return HttpResponse('1')
 
