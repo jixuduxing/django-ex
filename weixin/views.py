@@ -10,9 +10,9 @@ class Weixin(View):
     token = 'jixuduxing'
 
     def validate(self, request):
-        signature = request.REQUEST.get('signature', '')
-        timestamp = request.REQUEST.get('timestamp', '')
-        nonce = request.REQUEST.get('nonce', '')
+        signature = request.GET.get('signature', '')
+        timestamp = request.GET.get('timestamp', '')
+        nonce = request.GET.get('nonce', '')
 
         tmp_str = hashlib.sha1(''.join(sorted([self.token, timestamp, nonce]))).hexdigest()
         if tmp_str == signature:
