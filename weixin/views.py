@@ -22,9 +22,10 @@ class Weixin(View):
     def get(self, request):
         if self.validate(request):
             return HttpResponse(request.REQUEST.get('echostr', ''))
+        return HttpResponse('2')
 
     def post(self,request):
-        return HttpResponse("Hello world ! ")
+        return HttpResponse('1')
 
         # raise PermissionDenied
 
