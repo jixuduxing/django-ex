@@ -13,14 +13,14 @@ class Weixin(View):
 
     def validate(self, request):
         import logging
-        signature = request.GET.get('signature', '')
+        signature = request.GET.get('signature', u'')
         logging.debug('signature:'+signature)
-        timestamp = request.GET.get('timestamp', '')
+        timestamp = request.GET.get('timestamp', u'')
         logging.debug('timestamp:'+timestamp)
-        nonce = request.GET.get('nonce', '')
+        nonce = request.GET.get('nonce', u'')
         logging.debug('nonce:'+nonce)
-
-        tmp_str = hashlib.sha1(''.join(sorted([self.token, timestamp, nonce]))).hexdigest()
+        pstr = u''.join(sorted([self.token, timestamp, nonce]))
+        tmp_str = hashlib.sha1(pstr.encode(encoding='utf-8')).hexdigest()
         logging.debug('tmp_str:'+tmp_str)
         # assert False
         if tmp_str == signature:
