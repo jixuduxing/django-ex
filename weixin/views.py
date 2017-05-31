@@ -13,17 +13,17 @@ class Weixin(View):
 
     def validate(self, request):
         import logging
-        signature = request.GET.get('signature', u'')
+        signature = request.GET.get('signature', '')
         logging.debug('signature:'+signature)
-        timestamp = request.GET.get('timestamp', u'')
+        timestamp = request.GET.get('timestamp', '')
         logging.debug('timestamp:'+timestamp)
-        nonce = request.GET.get('nonce', u'')
+        nonce = request.GET.get('nonce', '')
         logging.debug('nonce:'+nonce)
         list = [self.token, timestamp, nonce]
         list.sort()
-        sha1 = hashlib.sha1()
-        map(sha1.update, list)
-        hashcode = sha1.hexdigest()
+        sha2 = hashlib.sha1()
+        map(sha2.update, list)
+        hashcode = sha2.hexdigest()
         logging.debug('hashcode:' + hashcode)
         if hashcode == signature:
             return True
@@ -36,9 +36,9 @@ class Weixin(View):
         logging.debug('request:')
         if self.validate(request):
             logging.debug('echostr')
-            return HttpResponse(request.GET.get('echostr', ''))
+            return HttpResponse(request.GET.get('echostr', '2'))
         logging.debug('2')
-        return HttpResponse('2')
+        return HttpResponse(request.GET.get('echostr', '2'))
 
     @csrf_exempt
     def post(self,request):
