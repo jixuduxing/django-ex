@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 import os
 from django.shortcuts import render
 from django.conf import settings
@@ -25,7 +24,7 @@ class Weixin(View):
         sha1 = hashlib.sha1()
         map(sha1.update, list)
         hashcode = sha1.hexdigest()
-        # assert False
+        logging.debug('hashcode:' + hashcode)
         if hashcode == signature:
             return True
         logging.debug('return False')
