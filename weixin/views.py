@@ -6,16 +6,13 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
 
-import logging
-logging.basicConfig(
-    level = logging.DEBUG,
-    format = '%(asctime)s %(levelname)s %(message)s',
-)
+
 
 class Weixin(View):
     token = 'jixuduxing'
 
     def validate(self, request):
+        import logging
         signature = request.GET.get('signature', '')
         logging.debug('signature:'+signature)
         timestamp = request.GET.get('timestamp', '')
@@ -33,6 +30,7 @@ class Weixin(View):
 
     @csrf_exempt
     def get(self, request):
+        import logging
         logging.debug('request:'+str(request))
         if self.validate(request):
             logging.debug('echostr')
