@@ -6,25 +6,38 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 import hashlib
 
+import logging
+logging.basicConfig(
+    level = logging.DEBUG,
+    format = '%(asctime)s %(levelname)s %(message)s',
+)
+
 class Weixin(View):
     token = 'jixuduxing'
 
     def validate(self, request):
         signature = request.GET.get('signature', '')
+        logging.debug('signature:'+signature)
         timestamp = request.GET.get('timestamp', '')
+        logging.debug('timestamp:'+timestamp)
         nonce = request.GET.get('nonce', '')
+        logging.debug('nonce:'+nonce)
 
         tmp_str = hashlib.sha1(''.join(sorted([self.token, timestamp, nonce]))).hexdigest()
-        assert False
+        logging.debug('tmp_str:'+tmp_str)
+        # assert False
         if tmp_str == signature:
             return True
-
+        logging.debug('return False')
         return False
 
     @csrf_exempt
     def get(self, request):
+        logging.debug('request:'+str(request))
         if self.validate(request):
+            logging.debug('echostr')
             return HttpResponse(request.GET.get('echostr', ''))
+        logging.debug('2')
         return HttpResponse('2')
 
     @csrf_exempt
