@@ -20,7 +20,7 @@ logging.basicConfig(
     level = logging.DEBUG,
     format = '%(asctime)s %(levelname)s %(message)s',
     filename = 'myapp.log',
-    filemode = 'w'
+    filemode = 'w+'
 )
 logging.debug('testlog')
 

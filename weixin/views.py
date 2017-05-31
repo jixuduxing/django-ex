@@ -31,7 +31,7 @@ class Weixin(View):
     @csrf_exempt
     def get(self, request):
         import logging
-        logging.debug('request:'+str(request))
+        logging.debug('request:')
         if self.validate(request):
             logging.debug('echostr')
             return HttpResponse(request.GET.get('echostr', ''))
