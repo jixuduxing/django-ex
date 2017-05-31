@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import os
 from django.shortcuts import render
 from django.conf import settings
@@ -19,11 +20,13 @@ class Weixin(View):
         logging.debug('timestamp:'+timestamp)
         nonce = request.GET.get('nonce', u'')
         logging.debug('nonce:'+nonce)
-        pstr = u''.join(sorted([self.token, timestamp, nonce]))
-        tmp_str = hashlib.sha1(pstr.encode(encoding='utf-8')).hexdigest()
-        logging.debug('tmp_str:'+tmp_str)
+        list = [self.token, timestamp, nonce]
+        list.sort()
+        sha1 = hashlib.sha1()
+        map(sha1.update, list)
+        hashcode = sha1.hexdigest()
         # assert False
-        if tmp_str == signature:
+        if hashcode == signature:
             return True
         logging.debug('return False')
         return False
