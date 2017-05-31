@@ -22,6 +22,7 @@ logging.basicConfig(
     filename = 'myapp.log',
     filemode = 'w'
 )
+logging.debug('testlog')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
