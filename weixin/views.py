@@ -8,7 +8,7 @@ from django.template.loader import render_to_string
 from django.utils.encoding import smart_str
 import hashlib
 import time
-from weimsg import WeiMsg
+from .weimsg import WeiMsg
 import xml.etree.ElementTree as ET
 
 
