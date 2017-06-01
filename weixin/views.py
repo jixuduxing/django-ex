@@ -5,13 +5,12 @@ from django.views.generic.base import View
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.template.loader import render_to_string
-from django.utils.encoding import smart_str, smart_unicode
+from django.utils.encoding import smart_str
 import hashlib
 import time
 from WeiMsg import WeiMsg
 import xml.etree.ElementTree as ET
-# def default_handler(recv_msg):
-#     return text_response(recv_msg, "没有匹配操作，返回默认信息")
+
 
 def paraseMsgXml(rootElem):
     msg = {}
