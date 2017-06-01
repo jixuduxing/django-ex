@@ -1,7 +1,6 @@
 import hashlib
 import os
 import re
-import urllib2
 
 # basic info
 re_msg_type = re.compile(r"<MsgType><!\[CDATA\[(.*?)\]\]></MsgType>")
