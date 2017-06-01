@@ -4,9 +4,65 @@ from django.conf import settings
 from django.views.generic.base import View
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
+from django.template.loader import render_to_string
+from django.utils.encoding import smart_str, smart_unicode
 import hashlib
+import time
+from WeiMsg import WeiMsg
+import xml.etree.ElementTree as ET
+# def default_handler(recv_msg):
+#     return text_response(recv_msg, "没有匹配操作，返回默认信息")
 
+def paraseMsgXml(rootElem):
+    msg = {}
+    if rootElem.tag == 'xml':
+        for child in rootElem:
+            msg[child.tag] = smart_str(child.text)
+    return msg
 
+def getReplyXml(msg,replyContent):
+    TextReply = "<xml><ToUserName><![CDATA[%s]]></ToUserName><FromUserName><![CDATA[%s]]></FromUserName><CreateTime>%s</CreateTime><MsgType><![CDATA[%s]]></MsgType><Content><![CDATA[%s]]></Content><FuncFlag>0</FuncFlag></xml>";
+    TextReply = TextReply % (msg['FromUserName'],msg['ToUserName'],str(int(time.time())),'text',replyContent)
+    return TextReply
+
+def responseMsg(request):
+    rawStr = smart_str(request.raw_post_data)
+    msg = paraseMsgXml(ET.fromstring(rawStr))
+    if msg['Content'] == 'Hello2BizUser':
+        replyContent = 'thankyou!'
+    else:
+        replyContent = 'Hello'
+    return getReplyXml(msg, replyContent)
+
+TOKEN = "jixuduxing"
+
+def checkSignature(request):
+    global TOKEN
+    signature = request.GET.get("signature", None)
+    timestamp = request.GET.get("timestamp", None)
+    nonce = request.GET.get("nonce", None)
+    echoStr = request.GET.get("echostr",None)
+
+    token = TOKEN
+    tmpList = [token,timestamp,nonce]
+    tmpList.sort()
+    tmpstr = "%s%s%s" % tuple(tmpList)
+    tmpstr = hashlib.sha1(tmpstr).hexdigest()
+    if tmpstr == signature:
+        return echoStr
+    else:
+        return None
+
+@csrf_exempt
+def handleRequest(request):
+    if request.method == 'GET':
+        response = HttpResponse(checkSignature(request),content_type="text/plain")
+        return response
+    elif request.method == 'POST':
+        response = HttpResponse(responseMsg(request),content_type="application/xml")
+        return response
+    else:
+        return None
 
 class Weixin(View):
     token = 'jixuduxing'
@@ -40,9 +96,24 @@ class Weixin(View):
         logging.debug('2')
         return HttpResponse(request.GET.get('echostr', '2'))
 
+
+
     @csrf_exempt
     def post(self,request):
-        return HttpResponse('1')
+        import logging
+        coutent = request.body()
+        logging.debug(coutent)
+        recv_msg = WeiMsg(request.body)
+        context = {
+            'to_user': recv_msg.from_user_name,
+            'from_user': recv_msg.to_user_name,
+            'create_time': int(time.time()),
+            'reply': recv_msg.content,
+        }
+        logging.debug(str(context) )
+        rendered = render_to_string('reply_text.xml', context)
+        return HttpResponse(rendered)
+
 
         # raise PermissionDenied
 
