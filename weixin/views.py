@@ -100,18 +100,21 @@ class Weixin(View):
     @csrf_exempt
     def post(self,request):
         import logging
-        coutent = request.body()
-        logging.debug(coutent)
-        recv_msg = WeiMsg(request.body)
-        context = {
-            'to_user': recv_msg.from_user_name,
-            'from_user': recv_msg.to_user_name,
-            'create_time': int(time.time()),
-            'reply': recv_msg.content,
-        }
-        logging.debug(str(context) )
-        rendered = render_to_string('reply_text.xml', context)
-        return HttpResponse(rendered)
+        try:
+
+            logging.debug(request.body)
+            recv_msg = WeiMsg(request.body)
+            context = {
+                'to_user': recv_msg.from_user_name,
+                'from_user': recv_msg.to_user_name,
+                'create_time': int(time.time()),
+                'reply': recv_msg.content,
+            }
+            logging.debug(str(context) )
+            rendered = render_to_string('reply_text.xml', context)
+            return HttpResponse(rendered)
+        except Exception, ex:
+            logging.debug(ex)
 
 
         # raise PermissionDenied
