@@ -10,7 +10,7 @@ import hashlib
 import time
 from .weimsg import WeiMsg
 import xml.etree.ElementTree as ET
-
+import traceback
 
 def paraseMsgXml(rootElem):
     msg = {}
@@ -113,7 +113,7 @@ class Weixin(View):
             logging.debug(str(context) )
             rendered = render_to_string('reply_text.xml', context)
             return HttpResponse(rendered)
-        except Exception, ex:
+        except Exception as ex:
             logging.debug(ex)
 
 
