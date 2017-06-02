@@ -101,7 +101,7 @@ class Weixin(View):
     def post(self,request):
         import logging
         try:
-
+            logging.debug('post')
             logging.debug(request.body)
             recv_msg = WeiMsg(request.body)
             context = {
