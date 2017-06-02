@@ -63,6 +63,7 @@ def handleRequest(request):
     else:
         return None
 
+
 class Weixin(View):
     token = 'jixuduxing'
 
