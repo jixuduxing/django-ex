@@ -66,11 +66,12 @@ MIDDLEWARE_CLASSES = (
 )
 
 ROOT_URLCONF = 'project.urls'
+TEMPLATE_DIRS = (os.path.join(BASE_DIR, 'openshift/templates'),)
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [os.path.join(BASE_DIR, 'openshift/templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'debug': DEBUG,
