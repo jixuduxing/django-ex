@@ -71,6 +71,7 @@ class WeiMsg(object):
     def __init__(self, msg):
         """genetate a message object
         """
+        msg = msg.decode('utf-8')
         self.to_user_name = self.get_info(re_msg_tuid, msg)
         self.from_user_name = self.get_info(re_msg_fuid, msg)
         self.create_time = self.get_info(re_msg_ctime, msg)
