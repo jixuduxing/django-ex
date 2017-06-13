@@ -107,10 +107,10 @@ class Weixin(View):
             logging.debug(request.body)
             recv_msg = WeiMsg(request.body)
             context = {
-                'to_user': recv_msg.from_user_name,
-                'from_user': recv_msg.to_user_name,
-                'create_time': int(time.time()),
-                'reply': recv_msg.content,
+                'toUser': recv_msg.from_user_name,
+                'fromUser': recv_msg.to_user_name,
+                'createTime': int(time.time()),
+                'content': recv_msg.content,
             }
             logging.debug(str(context) )
             rendered = render_to_string('reply_text.xml', context)
