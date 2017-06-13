@@ -103,6 +103,7 @@ class Weixin(View):
         import logging
         try:
             logging.debug('post')
+            logging.debug(repr(request))
             logging.debug(request.body)
             recv_msg = WeiMsg(request.body)
             context = {
@@ -115,6 +116,7 @@ class Weixin(View):
             rendered = render_to_string('reply_text.xml', context)
             return HttpResponse(rendered)
         except Exception as ex:
+            logging.debug('something wrong:')
             logging.debug(ex)
 
 
