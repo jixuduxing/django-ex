@@ -110,6 +110,7 @@ class Weixin(View):
                 'toUser': recv_msg.from_user_name,
                 'fromUser': recv_msg.to_user_name,
                 'createTime': int(time.time()),
+                'type': recv_msg.msg_type,
                 'content': recv_msg.content,
             }
             logging.debug(str(context) )
