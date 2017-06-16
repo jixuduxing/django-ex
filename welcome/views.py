@@ -5,7 +5,7 @@ from django.http import HttpResponse
 
 from . import database
 from .models import PageView
-
+import io
 # Create your views here.
 
 def index(request):
@@ -20,3 +20,12 @@ def index(request):
 
 def health(request):
     return HttpResponse(PageView.objects.count())
+
+def getcontent( filename):
+    fileR = io.open(filename,'r')
+    content = fileR.read()
+    fileR.close()
+    return content
+
+def log(request):
+    return HttpResponse(getcontent('myapp.log'))
