@@ -11,6 +11,10 @@ import time
 from .weimsg import WeiMsg
 import xml.etree.ElementTree as ET
 import traceback
+import urllib2
+import json
+# TOKEN = "******"
+API_KEY = 'bb0d3afc6f344cc1a5c177e73a9d3bea'
 
 def paraseMsgXml(rootElem):
     msg = {}
@@ -106,13 +110,34 @@ class Weixin(View):
             logging.debug(repr(request))
             logging.debug(request.body)
             recv_msg = WeiMsg(request.body)
+            raw_tulingURL = "http://www.tuling123.com/openapi/api?key=%s&%s&info=" % (API_KEY,recv_msg.from_user_name)
+            tulingURL = "%s%s" % (raw_tulingURL,urllib2.quote(recv_msg.content))
+            req=urllib2.Request(tulingURL)
+            raw_json=urllib2.urlopen(req).read()
+            hjson=json.loads(raw_json)
+            length=len(hjson.keys())
+            content=hjson['text'].encode('utf-8')
+            if length==3:
+                replyContent= "%s%s"%(content,hjson['url'].encode('utf-8'))
+            elif length==2:
+                replyContent= content
+            else:
+                return "please input again."
+
             context = {
                 'toUser': recv_msg.from_user_name,
                 'fromUser': recv_msg.to_user_name,
                 'createTime': int(time.time()),
                 'type': recv_msg.msg_type,
-                'content': recv_msg.content,
+                'content': replyContent,
             }
+            # context = {
+            #     'toUser': recv_msg.from_user_name,
+            #     'fromUser': recv_msg.to_user_name,
+            #     'createTime': int(time.time()),
+            #     'type': recv_msg.msg_type,
+            #     'content': recv_msg.content,
+            # }
             logging.debug(str(context) )
             rendered = render_to_string('reply_text.xml', context)
             return HttpResponse(rendered)
